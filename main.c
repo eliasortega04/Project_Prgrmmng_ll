@@ -31,6 +31,7 @@ printf("\n\n\t\t 1.- ");
 printf("\t\t 2.- ");
 printf("\t\t 3.- ");
 printf("\t\t 4.- ");
+printf("\t\t 5.- ");
 printf("\n\n\n\n\t\t Seleccione ... ");
   return 0;
 }
