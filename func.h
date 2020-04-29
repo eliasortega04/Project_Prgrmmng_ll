@@ -1,2 +1,10 @@
 int Register();
 int login();
+int Register();
+int login();
+int Torta();
+int Tacos();
+int Hambuguesa();
+int Chilaquiles();
+int Burrito();
+int Gringa();
