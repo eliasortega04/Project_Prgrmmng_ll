@@ -10,6 +10,7 @@ int login(){
 	printf("Usuario\n");
   return(0);
 }
+
 int  Torta(){
 	int cant_1, sab_1, past_1=0, pll_1=0, bist_1=0;
   float prc_1;
