@@ -489,7 +489,7 @@ void inicioSesionEmpleado()
         }
     }
     pausa();
-    menuTrabajador();
+    menuTrabajador(numTrabajadorIniciado);
 }
 
 void cargarDatosClientes()
@@ -653,7 +653,7 @@ void cargarDatosPedidos()
 
     else
     {
-        printf("No se pudo leer el archivo o aun no se ha registrado ninguna pelicula!\n\n");
+        printf("No se pudo leer el archivo o aun no se ha registrado ningun pedido!\n\n");
         pausa();
 
     }
