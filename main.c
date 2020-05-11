@@ -3,7 +3,7 @@
 	Name: Acatlan-Eats
 	Authors: Albarran Lopez Denisse, Gonzalez Ortega Fernando Elias, Ordoniez Perez Arizbeth, Ramos Miguel Roxana, Rivas Torres Monserrat
 
-	Date Start: 30/02/20 17:49
+	Date Start: 20/02/20 17:49
 	Description:	Base de datos y app para pedir comida dentro de la FES
 	
 					************* PROGRAMA CORRIDO EN DEV C++ EN WINDOWS ****************** 
