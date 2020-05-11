@@ -11,7 +11,7 @@
 
 /*	Numero confidencial del gerente: 0001
 	Contraseña del Gerente: admin
-	Modificar numero y clave en la linea 1832 y 1833*/
+	Modificar numero y clave en la linea 1840 y 1841*/
 
 #include <conio.h>
 #include <string.h>
@@ -1097,13 +1097,11 @@ void imprimirTicket()
 	int encontrados=0;
     int i=cuentaPedidos;
     char* patron;
-    char nombreBuscar[CADENA];
     fflush(stdin);
 
     printf("\n\t\t*********TICKET************\n\n");
 
-    //for(i=0; i; i++)
-    //{
+    
         patron=strstr(pedidos[i].platillo,pedidos[i].platillo);
         if (patron!=NULL)
         {
@@ -1112,16 +1110,9 @@ void imprimirTicket()
             encontrados++;
         }
 
-    //}
-
-    /*if (cliente[i].tipo=="programado")
-    {
-        printf("Su pedido se entregara a la brevedad posible\n");
-    }
-    else
-    {*/
-        printf("Su pedido es prioritario se entregara conforme a la demanda de envios express");
-    //}
+    
+        printf("Su pedido se entregara conforme a la demanda de envios express");
+    
 
     	printf("\n\n El TOTAL incluye envio\nEn caso de que el pedido sobre pase el total, se te cobrara un extra significativo");
     	pausa();
