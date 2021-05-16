@@ -3,17 +3,18 @@
 	Name: Acatlan-Eats
 	Authors: Albarran Lopez Denisse, Gonzalez Ortega Fernando Elias, Ordoniez Perez Arizbeth, Ramos Miguel Roxana, Rivas Torres Monserrat
 
-	Date Start: 20/02/20 17:49
+	Date Start: 20/03/20 17:49
 	Description:	Base de datos y app para pedir comida dentro de la FES
 	
-					************* PROGRAMA CORRIDO EN DEV C++ EN WINDOWS ****************** 
+					************* PROGRAMA CORRIDO EN DEV C++ EN WINDOWS 10****************** 
+					El programa debe compilarse en C, sino, causara un error.
 */
 
 /*	Numero confidencial del gerente: 0001
 	Contraseña del Gerente: admin
-	Modificar numero y clave en la linea 1840 y 1841*/
+	Modificar numero y clave en la funcion booleano datosCorrectosGerente();*/
 
-#include <conio.h>
+#include <conio.h> //Biblioteca necesaria para funcion getch();
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -56,7 +57,7 @@
 #define TOTAL_ATRIBUTOS_PEDIDOS 7
 
 typedef enum {falso,verdadero} booleano;
-typedef enum {programado,express} tipoPedido;
+typedef enum {programado,express} tipoPedido;//Tipo de Envio
 
 typedef struct
 {
@@ -66,7 +67,7 @@ typedef struct
     char domicilio[CADENA+1];
     char telefono[CADENA+1];
     long int sueldo;
-} admin;
+} admin;//Estructura para empleados
 
 typedef struct
 {
@@ -75,17 +76,17 @@ typedef struct
     char usuario[CADENA+1];
     char numTarjetaCredito[CADENA+1];
     tipoPedido tipo;
-} cliente;
+} cliente;//Estructura para cliente
 
 typedef struct
 {
     char platillo[CADENA+1];
     char edificio [CADENA+1];
     char salon [CADENA+1];
-    char lugar [TAMANO_SINOPSIS+1];
+    char lugar [CADENA+1];
     float subtotal;
     float total;
-} orden;
+} orden;//Estructura para pedido
 
 //Variables para la manipulacion de registros
 admin administradores[ADMINS];
@@ -177,7 +178,7 @@ int main()
     do
     {
         imprimirTitulo();
-        opcion=opcionesMenuPrincipal();
+        opcion=opcionesMenuPrincipal();//Menu principal
 
         switch(opcion)
         {
@@ -227,9 +228,10 @@ int opcionesMenuPrincipal()
 {
     int opcion;
     error: fflush(stdin);
-    printf("1. Registrarse\n\n");
+    printf("1. Registrarse como cliente\n\n");
     printf("2. Iniciar Sesion\n\n");
     printf("3. Salir\n\n");
+    printf("*** NOTA: Para registrarte como empleado ponte en contacto con el gerente ***\n\n");
     printf("Opcion: ");
     scanf("%d",&opcion);
     while(opcion<0&&opcion>3)
@@ -245,7 +247,8 @@ int opcionesMenuPrincipal()
 
 void imprimirTitulo()
 {
-    printf("\t\t\t***ACATLAN-EATS***\n\n");
+    printf("\t\t\t*** ACATLAN-EATS ***\n\n");
+    printf("\t\t*** De la FES a tu paladar! ***\n\n");
 }
 
 int opcionesMenuSesion()
@@ -253,7 +256,7 @@ int opcionesMenuSesion()
     int opcion;
     error: fflush(stdin);
     system(CLEAN);
-    printf("\t\t\t***Iniciar Sesion***\n\n");
+    printf("\t\t\t*** Iniciar Sesion ***\n\n");
     printf("1. Iniciar sesion como Gerente\n");
     printf("2. Iniciar Sesion como Empleado\n");
     printf("3. Iniciar sesion como Cliente\n\n");
@@ -316,17 +319,8 @@ void inicioSesionCliente()
     }
     while(!datosCorrectosClientes(usuarioIniciado,clave))
     {
-        error2: printf("\n\nLos datos ingresados no fueron correctos intentalo nuevamente\n\n");
-        fflush(stdin);
-        printf("Ingresa tu usuario: ");
-        gets(usuarioIniciado);
-        fflush(stdin);
-        ocultarClave(clave);
-        while(strcmp(usuarioIniciado,"\0")==0)
-        {
-            printf("\n\nOpcion no valida!\n\n");
-            goto error2;
-        }
+        printf("\n\nLos datos ingresados no fueron correctos intentalo nuevamente\n\n");
+      	goto error;
     }
     pausa();
     menuCliente(usuarioIniciado);
@@ -400,11 +394,11 @@ void pedirDatosCliente(int i)
     printf("Nombre: ");
     gets(clientes[i].nombre);
     fflush(stdin);
-    printf("usuario: ");
+    printf("Usuario: ");
     gets(clientes[i].usuario);
     ocultarClave(clientes[i].clave);
     fflush(stdin);
-    printf("Ingresa el numero de tarjeta de credito: ");
+    printf("Ingresa tu numero de tarjeta de credito (16 digitos): ");
     CC: gets(clientes[i].numTarjetaCredito);
     tarjeta=strlen(clientes[i].numTarjetaCredito);
     if(tarjeta!=16){
@@ -435,6 +429,7 @@ void pedirDatosCliente(int i)
 
 void pedirDatosEmpleado(int i)
 {
+	int longitud;
     fflush(stdin);
     printf("***Ingresa los datos***\n\n");
     printf("Nombre: ");
@@ -445,11 +440,16 @@ void pedirDatosEmpleado(int i)
     fflush(stdin);
     ocultarClave(administradores[i].clave);
     fflush(stdin);
-    printf("Ingresa tu domicilio: ");
+    printf("Ingresa el domicilio: ");
     gets(administradores[i].domicilio);
-    fflush(stdin);
-    printf("Ingresa tu telefono: ");
+    error: fflush(stdin);
+    printf("Ingresa el telefono (10 digitos): ");
     gets(administradores[i].telefono);
+    longitud=strlen(administradores[i].telefono);
+    if(longitud!=10){
+    	printf("\n No es un numero de telefono, intentalo de nuevo.\n");
+    	goto error;
+	}
     fflush(stdin);
     printf("Ingresa el sueldo: ");
     scanf("%ld",&administradores[i].sueldo);
@@ -460,7 +460,7 @@ void inicioSesionEmpleado()
     system(CLEAN);
     char clave [CADENA+1];
     char numTrabajadorIniciado[CADENA];
-    fflush(stdin);
+    error: fflush(stdin);
     printf("Ingresa tu Numero de empleado: ");
     gets(numTrabajadorIniciado);
     fflush(stdin);
@@ -468,25 +468,13 @@ void inicioSesionEmpleado()
     while(strcmp(numTrabajadorIniciado,"\0")==0)
     {
         printf("\n\nOpcion no valida!\n\n");
-        fflush(stdin);
-        printf("Ingresa tu Numero de empleado: ");
-        gets(numTrabajadorIniciado);
-        fflush(stdin);
-        ocultarClave(clave);
+        goto error;
 
     }
     while(!datosCorrectosadministradores(numTrabajadorIniciado,clave))
     {
-        error: printf("\n\nLos datos ingresados no fueron correctos intentalo nuevamente\n\n");
-        fflush(stdin);
-        printf("Ingresa tu numero de empleado: ");
-        gets(numTrabajadorIniciado);
-        fflush(stdin);
-        ocultarClave(clave);
-        while(strcmp(numTrabajadorIniciado,"\0")==0)
-        {
-            goto error;
-        }
+        printf("\n\nLos datos ingresados no fueron correctos intentalo nuevamente\n\n");
+        goto error;
     }
     pausa();
     menuTrabajador(numTrabajadorIniciado);
@@ -589,6 +577,7 @@ void cargarDatosPedidos()
 
             strtok(comprobador,"\n");
             lineasLeidas++;
+      
 
             if(lineasLeidas==NOMBRE_LEIDO)
             {
@@ -617,7 +606,7 @@ void cargarDatosPedidos()
             
             if(lineasLeidas==TOTAL_LEIDO)
             {
-                pedidos[i].total=pedidos[i].subtotal;
+                pedidos[i].total=40.00;
             }
             
             if(lineasLeidas==TIPO_LEIDO)
@@ -758,6 +747,7 @@ int queClienteIngreso(char* usuarioIniciado)
     {
         if(strcmp(usuarioIniciado,clientes[i].usuario)==0)
         {
+        	printf("Ingresa de nuevo\n\n");
             break;
         }
     }
@@ -800,16 +790,17 @@ void pedirDatosPedido(int i)
 {
     int opcion;
     fflush(stdin);
+    printf("*** NOTA: En caso de que alguno de tus datos sea erroneo puedes modificarlo al finalizar en el menu ***\n\n");
     printf("Ingrese el platillo deseado: ");
     gets(pedidos[i].platillo);
     fflush(stdin);
-    printf("Ingrese el edificio: ");
+    printf("Ingrese el edificio (A1-A15): ");
     gets(pedidos[i].edificio);
     fflush(stdin);
-    printf("Ingrese el salon: ");
+    printf("Ingrese el salon : ");
     gets(pedidos[i].salon);
     fflush(stdin);
-    printf("Ingrese su lugar favorito para este platillo: ");
+    printf("Ingrese su cafeteria favorita para adquirir este platillo: ");
     gets(pedidos[i].lugar);
     fflush(stdin);
 }
@@ -940,8 +931,8 @@ void guardarArchivoPedido()
         fprintf(escritura,"%s\n",pedidos[i].edificio);
         fprintf(escritura,"%s\n",pedidos[i].salon);
         fprintf(escritura,"%s\n",pedidos[i].lugar);
-        fprintf(escritura,"%f\n",pedidos[i].subtotal);
-        fprintf(escritura,"%f\n",pedidos[i].total);
+        fprintf(escritura,"%0.2f\n",pedidos[i].subtotal=40.00);
+        fprintf(escritura,"%0.2f\n",pedidos[i].total=40.00);
 
         if(clientes[i].tipo==programado)
         {
@@ -959,7 +950,7 @@ void guardarArchivoPedido()
 void bienvenida()
 {
     printf("\t\t\t***BIENVENIDO A ACATLAN-EATS***\n\n");
-    printf("\t\t     REGISTRATE PARA MAYORES BENEFICIOS!!!\n\n");
+    printf("\t\t *** REGISTRATE PARA MAYORES BENEFICIOS!!! ***\n\n");
     pausa();
     system(CLEAN);
 }
@@ -988,7 +979,7 @@ void mostrarDatosTrabajador(int i)
     printf("Clave: %s\n",administradores[i].clave);
     printf("Domicilio: %s\n",administradores[i].domicilio);
     printf("Telefono: %s\n",administradores[i].telefono);
-    printf("Suelgo: %ld\n\n",administradores[i].sueldo);
+    printf("Sueldo: %ld\n\n",administradores[i].sueldo);
 }
 
 void mostrarDatosPedido(int i)
@@ -1029,7 +1020,7 @@ void menuCliente(char *usuario)
         {
             printf("Express");
         }
-        printf(" ***\n\n");
+        printf(" ****\n\n");
         printf("1. Ingresar un pedido.\n\n");
         printf("2. Salir\n\n");
         fflush(stdin);
@@ -1095,7 +1086,14 @@ void imprimirTicket()
 {
 	system(CLEAN);
 	int encontrados=0;
-    int i=cuentaPedidos;
+	int i;
+ 	if(cuentaPedidos>0){
+ 		i=cuentaPedidos-1;
+	 }
+	 else{
+	 	i=cuentaPedidos;
+	 }
+    
     char* patron;
     fflush(stdin);
 
@@ -1127,7 +1125,7 @@ void modificarPedido()
     printf("MODIFICAR UN PEDIDO\n\n");
     printf("Ingresa el nombre del platillo que deseas modificar (De manera exacta): ");
     gets(nombreBuscar);
-    if(coincideNombrePedido(nombreBuscar))
+    if(coincideNombrePedido(nombreBuscar)==verdadero)
     {
         int i=damePosicionPedido(nombreBuscar);
         mostrarDatosPedido(i);
@@ -1155,7 +1153,7 @@ void bajaPedido()
     printf("DAR DE BAJA UNA PEDIDO\n\n");
     printf("Ingresa el nombre del platillo que deseas eliminar: ");
     gets(nombreBuscar);
-    if(coincideNombrePedido(nombreBuscar))
+    if(coincideNombrePedido(nombreBuscar)==verdadero)
     {
         int i=damePosicionPedido(nombreBuscar);
         mostrarDatosPedido(i);
@@ -1224,7 +1222,6 @@ void buscarPedido()
             printf("\n\n");
             encontrados++;
         }
-
     }
 
     if (encontrados)
@@ -1327,9 +1324,6 @@ void menuOrden()//trabajar sobre esta, pasarla a cliente
             exit(1);
             break;
 
-        /*case 6:
-            break;*/
-
         default:
             imprimirError();
             break;
@@ -1367,7 +1361,7 @@ void modificarCliente()
     printf("MODIFICAR UN CLIENTE\n\n");
     printf("Ingresa el usuario del cliente que deseas modificar: ");
     gets(correoBuscar);
-    if(coincideCorreoCliente(correoBuscar))
+    if(coincideCorreoCliente(correoBuscar)==verdadero)
     {
         int i=damePosicionCliente(correoBuscar);
         mostrarDatosCliente(i);
@@ -1393,7 +1387,7 @@ void bajaCliente()
     printf("DAR DE BAJA UN CLIENTE\n\n");
     printf("Ingresa el usuario del que deseas eliminar: ");
     gets(correoBuscar);
-    if(coincideCorreoCliente(correoBuscar))
+    if(coincideCorreoCliente(correoBuscar)==verdadero)
     {
         int i=damePosicionCliente(correoBuscar);
         mostrarDatosCliente(i);
@@ -1629,7 +1623,7 @@ void modificarTrabajador()
     printf("MODIFICAR UN TRABAJADOR\n\n");
     printf("Ingresa el numero del trabajador que deseas modificar: ");
     gets(buscarNumero);
-    if(coincideNumeroTrabajador(buscarNumero))
+    if(coincideNumeroTrabajador(buscarNumero)==verdadero)
     {
         int i=damePosicionTrabajador(buscarNumero);
         mostrarDatosTrabajador(i);
@@ -1658,7 +1652,7 @@ void bajaTrabajador()
     printf("DAR DE BAJA UN TRABAJADOR\n\n");
     printf("Ingresa el numero del trabajador que deseas eliminar: ");
     gets(buscarNumero);
-    if(coincideNumeroTrabajador(buscarNumero))
+    if(coincideNumeroTrabajador(buscarNumero)==verdadero)
     {
         int i=damePosicionTrabajador(buscarNumero);
         mostrarDatosTrabajador(i);
